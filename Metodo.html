@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Métodos Númericos</title>
+</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="shorcut icon" href="logo.ico">
+<link rel="stylesheet" href="style4.css">  
+<body text="White">
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="logo.png" alt="Logo empresa" class="logo-img"></a>
+        </div>
+        <nav>
+            <a href="index.html" class="nav-link">Inicio</a>
+            <a href="Analisis.html" class="nav-link">Análisis</a>
+            <a href="Arquitectura.html" class="nav-link">Arquitectura</a>
+            <a href="Metodo.html" class="nav-link">Métodos</a>
+            <a href="Comentarios.html" class="nav-link">Móvil</a>
+        </nav>
+    </header>
+    <br><br>
+    <i><h1 align="center">Historia del método de punto fijo</h1></i>
+    <font face="Times New Roman" size="3">
+        <p align="justify">El método del punto fijo es una técnica utilizada en matemáticas y análisis numérico para encontrar soluciones 
+            de ecuaciones mediante la iteración de una función específica. Se basa en la idea de encontrar un punto fijo de una función, 
+            es decir, un valor para el cual la función devuelve el mismo valor, esencialmente resolviendo la ecuación f(x)=x.Este método 
+            tiene su origen en el trabajo de matemáticos como Joseph-Louis Lagrange y Karl Weierstrass en el siglo XIX.</p>
+
+        <p align="justify">Se ha aplicado ampliamente en diversas áreas, como la física, la ingeniería, la economía y la informática, para 
+            resolver problemas que implican ecuaciones no lineales, sistemas de ecuaciones y optimización. Su aplicación se extiende a la 
+            resolución de ecuaciones diferenciales, problemas de valor inicial y condiciones de contorno, y en la modelización de fenómenos 
+            físicos y naturales. La eficacia del método del punto fijo depende de la elección adecuada de la función iterativa y de la 
+            convergencia hacia el punto fijo deseado.</p>
+    </font>
+    <br><br>
+    <i><h1 align="center">Diagrama de flujo del Metodo de Punto Fijo</h1></i>
+    <center>
+        <img src="Punto Fijo.png" alt="Punto Fijo" width="350px" height="600px" class="puntof"><br>
+        <i><p>Figura 1.1: Este diagrama de flujo muestra como opera el método de punto fijo, desde el ingreso de datos hasta las condiciones para que esta converga o no.</p></i><br>
+    </center>
+    <br><br>
+    <i><h1 align="center">Método del Punto Fijo</h1></i>
+    <p align="center">Para ingresar la ecuación, utiliza la notación estándar de operadores matemáticos y funciones:</p>
+    <nav align="center">
+        <i>
+            <li>Operadores matemáticos: suma (+), resta (-), multiplicación (*), división (/).</li>
+            <li>Exponentes: utiliza ^, por ejemplo, x^2 para x al cuadrado.</li>
+            <li>Funciones trigonométricas: sin(x), cos(x), tan(x).</li>
+            <li>Otras funciones matemáticas: sqrt(x) para raíz cuadrada, log(x) para logaritmo natural, exp(x) para exponencial, etc.</li>
+        </i>
+    </nav>
+    <br><br>
+
+    <center>
+        <table border="2">
+            <th>
+                <label for="equation">Ecuación:</label>
+<input type="text" id="equation"><br>
+<label for="initialValue">Valor Inicial:</label>
+<input type="number" id="initialValue"><br>
+<label for="iterations">Número de Iteraciones:</label>
+<input type="number" id="iterations" value=""><br>
+<button onclick="puntoFijo()">Calcular</button>
+<button onclick="limpiar()">Limpiar</button><br><br>
+
+<div id="plot" style="width: 350px; height: 406px; display: none;"></div>
+<br><br>
+<textarea id="iterationsOutput" readonly style="resize: none; width: 250px; height: 306px;"></textarea>
+
+<script>
+    function puntoFijo() {
+        const equationString = document.getElementById("equation").value.toLowerCase(); // Convertir a minúsculas
+        const initialValue = parseFloat(document.getElementById("initialValue").value);
+        const iterations = parseInt(document.getElementById("iterations").value);
+        const tolerance = 1e-6;
+
+        const equation = (x) => math.evaluate(equationString, { x });
+
+        let x = initialValue;
+        let data = [{ x: [], y: [], type: 'scatter', mode: 'lines+markers', name: 'Iterations' }];
+        let iterationsOutput = '';
+
+        for (let i = 0; i < iterations; i++) {
+            const nextX = equation(x);
+            data[0].x.push(i);
+            data[0].y.push(nextX);
+
+            iterationsOutput += `Iteración ${i + 1}: x = ${x} \n f(x) = ${nextX}\n\n`;
+
+            if (Math.abs(nextX - x) < tolerance) {
+                break;
+            }
+
+            x = nextX;
+        }
+
+        Plotly.newPlot('plot', data, {title: 'Gráfica de punto fijo', xaxis: {title: 'Iterations'}, yaxis: {title: 'Value'}});
+        document.getElementById("iterationsOutput").value = iterationsOutput;
+
+        // Mostrar la gráfica y el textarea
+        document.getElementById("plot").style.display = "block";         
+        document.getElementById("iterationsOutput").style.display = "block";
+    }
+
+    function limpiar() {
+        document.getElementById("equation").value = '';
+        document.getElementById("initialValue").value = '';
+        document.getElementById("iterations").value ='';
+        document.getElementById("plot").style.display = "none";         
+        document.getElementById("iterationsOutput").style.display = "none";
+    }
+</script>
+            </th>
+        </table>   
+    </center>
+</body>
+</html>
